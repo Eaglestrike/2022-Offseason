@@ -24,7 +24,9 @@ class AutoPaths
             TWO_MIDDLE,
             TWO_LEFT,
             THREE,
-            BIG_BOY
+            BIG_BOY,
+            DOMINIC,
+            EYE_FOR_AN_EYE
         };
         AutoPaths(Channel* channel);
         void setPath(Path path);
@@ -38,6 +40,8 @@ class AutoPaths
 
         void periodic(double yaw, SwerveDrive* swerveDrive);
         double initYaw();
+
+        int pathNum();
     private:
         Channel* channel_;
         Path path_;

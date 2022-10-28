@@ -25,7 +25,7 @@ namespace GeneralConstants
     const double GOAL_RADIUS = 0.6096;
 
     const double HANGAR_X = -2.5;
-    const double HANGAR_Y = -7;
+    const double HANGAR_Y = -6;
     const double FIELD_WIDTH = 8.2296;
     const double FIELD_LENGTH = 16.4592;
     const double HUB_BASE_RADIUS = 0.5;
@@ -144,6 +144,9 @@ namespace IntakeConstants
 {
     const int MOTOR_ID = 40;
     const int SOLENOID_ID = 0;
+
+    const double INTAKE_SPEED = 6;
+    const double OUTAKE_SPEED = -3;
 }
 
 namespace ClimbConstants
@@ -231,7 +234,9 @@ namespace ShooterConstants
     const int TURRET_AIMED = 3;
     const int TURRET_UNLOAD_AIMED = 3;
 
-    const double KICKER_VOLTS = 5;
+    const double KICKER_SERIALIZING_VOLTS = 2;
+    const double KICKER_SLOW_VOLTS = 2;
+    const double KICKER_OUTAKE_VOLTS = -5;
 
     const double UNLOADING_CURRENT = 15;
     const double UNLOADING_CURRENT_LOW = 5;
@@ -240,7 +245,7 @@ namespace ShooterConstants
 
 namespace ChannelConstants
 {
-    constexpr auto COLOR_SENSOR_PORT = frc::I2C::Port::kOnboard;
+    //constexpr auto COLOR_SENSOR_PORT = frc::I2C::Port::kOnboard;
     const double RED_R = 255; //TODO get values
     const double RED_G = 0;
     const double RED_B = 0;
@@ -249,5 +254,6 @@ namespace ChannelConstants
     const double BLUE_G = 0;
     const double BLUE_B = 255;
 
-    const int BALL_PROXIMITY = 310;
+    const int BALL_PROXIMITY = 200; //310
+    const int BALL_PROXIMITY_2 = 350;
 }

@@ -28,6 +28,8 @@ class Controls
 
         bool shootPressed();
         double getTurretManual();
+        bool launchpadShotDown();
+        bool tarmacShotDown();
 
         bool increaseRange();
         bool decreaseRange();

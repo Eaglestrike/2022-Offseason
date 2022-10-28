@@ -38,6 +38,7 @@ class Shooter
         void increaseRange();
         void decreaseRange();
         void setTurretManualVolts(double manualVolts);
+        void setManualShot(int shot);
         void clearBallShooting();
 
         Shooter(Limelight* limelight, SwerveDrive* swerveDrive, Channel* channel);
@@ -91,6 +92,7 @@ class Shooter
         //0.0001
 
         double yaw_;
+        int manualShotType_;
         bool unloadStarted_, unloadShooting_, shootStarted_, shooting_;
 
         map<double, tuple<double, double, double>> shotsMap_;

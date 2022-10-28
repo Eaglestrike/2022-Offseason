@@ -146,6 +146,85 @@ void AutoPaths::setPath(Path path)
         swervePaths_.push_back(p4);
         break;
     }
+    case DOMINIC:
+    {
+        SwervePath p1(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p1.addPoint(SwervePose(0, 0, -135, 0));
+        p1.addPoint(SwervePose(-0.707, -0.707, -135, 0));
+
+        p1.generateTrajectory(false);
+
+        SwervePath p2(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p2.addPoint(SwervePose(-0.707, -0.707, -135, 0));
+        p2.addPoint(SwervePose(-1.726-0.45, -0.2202+0.21, -64.45, 0.5));
+
+        p2.generateTrajectory(false);
+
+        SwervePath p3(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p3.addPoint(SwervePose(-1.726-0.45, -0.2202+0.21, -64.45, 0));
+        p3.addPoint(SwervePose(0, 0, 30, 1));
+
+        p3.generateTrajectory(false);
+
+        SwervePath p4(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p4.addPoint(SwervePose(0, 0, 30, 0));
+        p4.addPoint(SwervePose(-0.819912-0.1207008, 0.691896-0.4797552, -114.15, 0.6));
+
+        p4.generateTrajectory(false);
+
+        swervePaths_.push_back(p1);
+        swervePaths_.push_back(p2);
+        swervePaths_.push_back(p3);
+        swervePaths_.push_back(p4);
+        break;
+    }
+    case EYE_FOR_AN_EYE:
+    {
+        SwervePath p1(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p1.addPoint(SwervePose(0, 0, -135, 0));
+        p1.addPoint(SwervePose(-0.707, -0.707, -135, 0));
+
+        p1.generateTrajectory(false);
+
+        SwervePath p2(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p2.addPoint(SwervePose(-0.707, -0.707, -135, 0));
+        p2.addPoint(SwervePose(-1.726-0.45, -0.2202+0.21, -64.45, 0.5));
+
+        p2.generateTrajectory(false);
+
+        SwervePath p3(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p3.addPoint(SwervePose(-1.726-0.45, -0.2202+0.21, -64.45, 0));
+        p3.addPoint(SwervePose(1.556004, -1.441704, 110, 2.5));
+
+        p3.generateTrajectory(false);
+
+        SwervePath p4(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p4.addPoint(SwervePose(1.556004, -1.441704, 110, 0));
+        p4.addPoint(SwervePose(0, 0, 20, 1.5));
+
+        p4.generateTrajectory(false);
+
+        SwervePath p5(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
+
+        p5.addPoint(SwervePose(0, 0, 20, 0));
+        p5.addPoint(SwervePose(-0.819912-0.1207008, 0.691896-0.4797552, -114.15, 0.6));
+
+        p5.generateTrajectory(false);
+
+        swervePaths_.push_back(p1);
+        swervePaths_.push_back(p2);
+        swervePaths_.push_back(p3);
+        swervePaths_.push_back(p4);
+        swervePaths_.push_back(p5);
+    }
     }
 
     pathSet_ = true;
@@ -464,6 +543,212 @@ void AutoPaths::periodic(double yaw, SwerveDrive *swerveDrive)
         }
         break;
     }
+    case DOMINIC:
+    {
+        if (pathsOver)
+        {
+            intakeState_ = Intake::INTAKING;
+            shooterState_ = Shooter::SHOOTING;
+        }
+        else
+        {
+            switch(pathNum_)
+            {
+                case 0:
+                {
+                    intakeState_ = Intake::INTAKING;
+
+                    if(endOfSwervePath)
+                    {
+                        shooterState_ = Shooter::SHOOTING;
+
+                        if (!failsafeStarted_)
+                        {
+                            failsafeStarted_ = true;
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeTimer_.Start();
+                        }
+
+                        if (failsafeTimer_.Get().value() > 4)
+                        {
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeStarted_ = false;
+                            channel_->setBallsShot(0);
+                            nextPathReady_ = true;
+                        }
+                    }
+                    else
+                    {
+                        shooterState_ = Shooter::REVING;
+                    }
+
+                    break;
+                }
+                case 1:
+                {
+                    intakeState_ = Intake::INTAKING;
+                    shooterState_ = Shooter::TRACKING;
+
+                    if(endOfSwervePath)
+                    {
+                        nextPathReady_ = true;
+                    }
+
+                    break;
+                }
+                case 2:
+                {
+                    if(endOfSwervePath)
+                    {
+                        intakeState_ = Intake::OUTAKING;
+                        shooterState_ = Shooter::OUTAKING;
+
+                        if (!failsafeStarted_)
+                        {
+                            failsafeStarted_ = true;
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeTimer_.Start();
+                        }
+
+                        if (failsafeTimer_.Get().value() > 3)
+                        {
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeStarted_ = false;
+                            channel_->setBallsShot(0);
+                            nextPathReady_ = true;
+                        }
+                    }
+                    else
+                    {
+                        intakeState_ = Intake::INTAKING;
+                        shooterState_ = Shooter::TRACKING;
+                    }
+
+                    break;
+                }
+                case 3:
+                {
+                    intakeState_ = Intake::INTAKING;
+                    break;
+                }
+            }
+
+        }
+        break;
+    }
+    case EYE_FOR_AN_EYE:
+    {
+        if (pathsOver)
+        {
+            intakeState_ = Intake::INTAKING;
+            shooterState_ = Shooter::SHOOTING;
+        }
+        else
+        {
+            switch(pathNum_)
+            {
+                case 0:
+                {
+                    intakeState_ = Intake::INTAKING;
+
+                    if(endOfSwervePath)
+                    {
+                        shooterState_ = Shooter::SHOOTING;
+
+                        if (!failsafeStarted_)
+                        {
+                            failsafeStarted_ = true;
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeTimer_.Start();
+                        }
+
+                        if (failsafeTimer_.Get().value() > 4)
+                        {
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeStarted_ = false;
+                            channel_->setBallsShot(0);
+                            nextPathReady_ = true;
+                        }
+                    }
+                    else
+                    {
+                        shooterState_ = Shooter::REVING;
+                    }
+
+                    break;
+                }
+                case 1:
+                {
+                    intakeState_ = Intake::INTAKING;
+                    shooterState_ = Shooter::TRACKING;
+
+                    if(endOfSwervePath)
+                    {
+                        nextPathReady_ = true;
+                    }
+
+                    break;
+                }
+                case 2:
+                {
+                    intakeState_ = Intake::INTAKING;
+                    shooterState_ = Shooter::TRACKING;
+
+                    if(endOfSwervePath)
+                    {
+                        nextPathReady_ = true;
+                    }
+
+                    break;
+                }
+                case 3:
+                {
+                    if(endOfSwervePath)
+                    {
+                        intakeState_ = Intake::OUTAKING;
+                        shooterState_ = Shooter::OUTAKING;
+
+                        if (!failsafeStarted_)
+                        {
+                            failsafeStarted_ = true;
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeTimer_.Start();
+                        }
+
+                        if (failsafeTimer_.Get().value() > 3)
+                        {
+                            failsafeTimer_.Stop();
+                            failsafeTimer_.Reset();
+                            failsafeStarted_ = false;
+                            channel_->setBallsShot(0);
+                            nextPathReady_ = true;
+                        }
+                    }
+                    else
+                    {
+                        intakeState_ = Intake::INTAKING;
+                        shooterState_ = Shooter::TRACKING;
+                    }
+
+                    break;
+                }
+                case 4:
+                {
+                    intakeState_ = Intake::INTAKING;
+                    break;
+                }
+            }
+
+        }
+        break;
+    }
     }
 }
 
@@ -521,7 +806,22 @@ double AutoPaths::initYaw()
         return 90;
         break;
     }
+    case DOMINIC:
+    {
+        return -135;
+        break;
+    }
+    case EYE_FOR_AN_EYE:
+    {
+        return -135;
+        break;
+    }
     }
 
     return 0;
+}
+
+int AutoPaths::pathNum()
+{
+    return pathNum_;
 }

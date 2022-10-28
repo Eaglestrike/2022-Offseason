@@ -132,6 +132,16 @@ double Controls::getTurretManual()
 //3, 4200
 //4, 6100
 
+bool Controls::launchpadShotDown()
+{
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC2_BUTTON);
+}
+
+bool Controls::tarmacShotDown()
+{
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC1_BUTTON);
+}
+
 bool Controls::resetUnload()
 {
     return xbox_.GetRawAxis(InputConstants::XBOX_LTRIGGER) > 0.75;
