@@ -141,7 +141,9 @@ void Robot::AutonomousPeriodic()
     Intake::State intakeState = autoPaths_.getIntakeState();
     Shooter::State shooterState = autoPaths_.getShooterState();
 
-    if((channel_->badIdea()/* || shooter_->getState() == Shooter::UNLOADING*/) && !(autoPaths_.getPath() == AutoPaths::DOMINIC && autoPaths_.getPath() != 3))
+    if(channel_->badIdea() && 
+    !(autoPaths_.getPath() == AutoPaths::DOMINIC && autoPaths_.pathNum() != 3) &&
+    !(autoPaths_.getPath() == AutoPaths::EYE_FOR_AN_EYE && autoPaths_.pathNum() != 4)/* || shooter_->getState() == Shooter::UNLOADING*/)
     {
         shooterState = Shooter::UNLOADING;
     }
