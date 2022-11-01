@@ -164,7 +164,26 @@ void Shooter::periodic(double yaw)
 
     double hoodAngle, velocity, turretOffset, partDer, distance;
 
-    distance = swerveDrive_->getDistance(turret_.getAngle());
+    
+    if(state_ == MANUAL)
+    {
+        if(manualShotType_ == 1)
+        {
+            distance = 4.1641;
+        }
+        else if(manualShotType_ == 2)
+        {
+            distance = 2.5686;
+        }
+        else
+        {
+            distance = 0;
+        }
+    }
+    else
+    {
+        distance = swerveDrive_->getDistance(turret_.getAngle());
+    }
 
     if(distance != -1)
     {
@@ -216,11 +235,6 @@ void Shooter::periodic(double yaw)
     auto shot = shotsMap_.upper_bound(distance);
     if (shot != shotsMap_.begin() && shot != shotsMap_.end()/* && distance > 2 && distance < 7*/)
     {
-        //TODO disable interpolation when not using Andrew's points
-        /*double higher = shot->first;
-        double highHood = get<0>(shot->second);
-        double highVel = get<1>(shot->second);*/
-
         --shot;
         partDer = get<2>(shot->second);
 
@@ -228,29 +242,6 @@ void Shooter::periodic(double yaw)
         hoodAngle = get<0>(shotVals);
         velocity = get<1>(shotVals);
         turretOffset = get<2>(shotVals);
-
-        /*if(swerveDrive_->getGoalYVel() > 0.4 && state_ == REVING)
-        {
-            auto lowAngleShot = lowAngleShotsMap_.upper_bound(distance);
-            if(lowAngleShot != lowAngleShotsMap_.begin() && lowAngleShot != lowAngleShotsMap_.end())
-            {
-                --lowAngleShot;
-                partDer = get<2>(lowAngleShot->second);
-                shotVals = calcShootingWhileMoving(get<0>(lowAngleShot->second), get<1>(lowAngleShot->second), swerveDrive_->getGoalXVel(), swerveDrive_->getGoalYVel());
-                hoodAngle = get<0>(shotVals);
-                velocity = get<1>(shotVals);
-                turretOffset = get<2>(shotVals);
-            }
-        }*/
-
-        /*hoodAngle = get<0>(shot->second);
-        velocity = get<1>(shot->second);
-        turretOffset = 0;*/
-
-        //double skew = (distance - shot->first) / (higher - shot->first);
-
-        //hoodAngle += skew * (highHood - hoodAngle);
-        //velocity += skew * (highVel - velocity);
 
         hasShot_ = true;
 
@@ -496,10 +487,15 @@ void Shooter::periodic(double yaw)
         }
         case MANUAL:
         {
+            hood_.setWantedPos(hoodAngle);
+            
             turret_.setState(Turret::MANUAL);
             hood_.setState(Hood::AIMING);
 
-            if(manualShotType_ == 1)
+            units::volt_t volts{calcFlyPID(velocity)};
+            flywheelMaster_.SetVoltage(volts);
+
+            /*if(manualShotType_ == 1)
             {
                 hood_.setWantedPos(53.75);
                 units::volt_t volts {calcFlyPID(9.35)};
@@ -515,7 +511,7 @@ void Shooter::periodic(double yaw)
             {
                 hood_.setWantedPos(60);
                 flywheelMaster_.SetVoltage(units::volt_t(0));
-            }
+            }*/
 
             if(hood_.isReady() && flywheelReady_ && manualShotType_ != 0)
             {

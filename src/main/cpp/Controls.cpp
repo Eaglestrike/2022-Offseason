@@ -134,12 +134,12 @@ double Controls::getTurretManual()
 
 bool Controls::launchpadShotDown()
 {
-    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC2_BUTTON);
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC1_BUTTON);
 }
 
 bool Controls::tarmacShotDown()
 {
-    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC1_BUTTON);
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC2_BUTTON);
 }
 
 bool Controls::resetUnload()

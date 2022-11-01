@@ -173,9 +173,14 @@ void Turret::calcUnloadAng()
     angToGoal += 360 * 10;
     angToGoal = ((int)floor(angToGoal) % 360) + (angToGoal - floor(angToGoal));
 
-    if (abs(angToHangar - angToGoal) < 10) // TODO get value
+    double angDiff = abs(angToHangar - angToGoal);
+    if (angDiff < 10) // TODO get value
     {
         angToHangar += (angToHangar > angToGoal) ? 10 : -10; // TODO incorporate goal diameter?
+    }
+    else if(angDiff > 350)
+    {
+        angToHangar += (angToHangar > angToGoal) ? -10 : 10;
     }
 
     unloadAngle_ = 180 + angToHangar - yaw_;
