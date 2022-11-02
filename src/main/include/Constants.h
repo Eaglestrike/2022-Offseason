@@ -62,7 +62,7 @@ namespace InputConstants
     const int XBOX_RJOY_X = 4;
     const int XBOX_RJOY_Y = 5;
 
-    const int OUTAKE_BUTTON = 3;
+    const int OUTAKE_BUTTON = 4;
     
     const int AUTO_CLIMB_BUTTON = 1;
     const int AUTO_CLIMB_CANCEL = 2;
@@ -104,22 +104,22 @@ namespace SwerveConstants
     const int TR_DRIVE_ID = 13; //13, 3
     const int TL_DRIVE_ID = 11; //11, 1
     const int BR_DRIVE_ID = 18; //18, 4
-    const int BL_DRIVE_ID = 15; //15, 22
+    const int BL_DRIVE_ID = 22; //15, 22
 
     const int TR_TURN_ID = 14; //14, 5
     const int TL_TURN_ID = 12; //12, 7
     const int BR_TURN_ID = 17; //17, 10
-    const int BL_TURN_ID = 16; //16, 19
+    const int BL_TURN_ID = 19; //16, 19
 
     const int TR_CANCODER_ID = 62; //62, 2
     const int TL_CANCODER_ID = 10; //10, 9
     const int BR_CANCODER_ID = 8; //8, 8
-    const int BL_CANCODER_ID = 42; //42, 6
+    const int BL_CANCODER_ID = 6; //42, 6
     
     const double TR_CANCODER_OFFSET = 19.77; //19.77, 
     const double TL_CANCODER_OFFSET = 109.952; //109.952
     const double BR_CANCODER_OFFSET = 197.5; //197.5
-    const double BL_CANCODER_OFFSET = -236; // 356.39, -184 + 90, -236.3 + 180, 
+    const double BL_CANCODER_OFFSET = -139.92 + 180; // 356.39, -184 + 90, -236.3 + 180, idk before this it was -236
 
     const double MAX_LA = 3;
     const double MAX_LV = 4;

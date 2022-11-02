@@ -62,6 +62,7 @@ class Turret
         double manualVolts_;
         bool aimed_, unloadReady_;
         double prevYaw_, yaw_, offset_, unloadAngle_;
+        int prevUnloadDir_;
 
         double prevTime_, dT_, deltaYaw_, yawDT_, yawPrevTime_, yawVel_, currentSetPos_;
         frc::Timer timer_;

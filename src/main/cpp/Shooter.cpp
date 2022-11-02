@@ -538,6 +538,7 @@ void Shooter::periodic(double yaw)
             hood_.setState(Hood::IDLE);
 
             flywheelMaster_.SetVoltage(units::volt_t(0));
+            kickerMotor_.SetVoltage(units::volt_t(0));
             dewindIntegral();
             break;
         }

@@ -7,12 +7,14 @@ Turret::Turret(Limelight *limelight, SwerveDrive *swerveDrive) : turretMotor_(Sh
     limelight_ = limelight;
     swerveDrive_ = swerveDrive;
     currentSetPos_ = 0;
+    prevUnloadDir_ = 0;
 
     state_ = IDLE;
 }
 
 void Turret::periodic(double yaw, double offset)
 {
+    calcUnloadAng();
     yaw_ = yaw;
     offset_ = offset;
 
@@ -174,14 +176,64 @@ void Turret::calcUnloadAng()
     angToGoal = ((int)floor(angToGoal) % 360) + (angToGoal - floor(angToGoal));
 
     double angDiff = abs(angToHangar - angToGoal);
-    if (angDiff < 10) // TODO get value
+
+    frc::SmartDashboard::PutNumber("HAng", angToHangar);
+    frc::SmartDashboard::PutNumber("GAng", angToGoal);
+    if(angDiff < 3)
     {
-        angToHangar += (angToHangar > angToGoal) ? 10 : -10; // TODO incorporate goal diameter?
+        if(prevUnloadDir_ > 0)
+        {
+            angToHangar = angToGoal + 20;
+        }
+        else if(prevUnloadDir_ < 0)
+        {
+            angToHangar = angToGoal - 20;
+        }
+        else
+        {
+            if(angToHangar > angToGoal)
+            {
+                prevUnloadDir_ = 1;
+                angToHangar = angToGoal + 20;
+            }
+            else
+            {
+                prevUnloadDir_ = -1;
+                angToHangar = angToGoal - 20;
+            }
+        }
     }
-    else if(angDiff > 350)
+    else if (angDiff < 20) // TODO get value
     {
-        angToHangar += (angToHangar > angToGoal) ? -10 : 10;
+        //angToHangar += (angToHangar > angToGoal) ? 10 : -10; // TODO incorporate goal diameter?
+        //angToHangar = (angToHangar > angToGoal) ? angToGoal + 20 : angToGoal - 20;
+        if(angToHangar > angToGoal)
+        {
+            prevUnloadDir_ = 1;
+            angToHangar = angToGoal + 20;
+        }
+        else
+        {
+            prevUnloadDir_ = -1;
+            angToHangar = angToGoal - 20;
+        }
     }
+    /*else if(angDiff > 340)
+    {
+        //angToHangar += (angToHangar > angToGoal) ? -10 : 10;
+        //angToHangar = (angToHangar > angToGoal) ? angToGoal - 20 : angToGoal + 20;
+        if(angToHangar > angToGoal)
+        {
+            prevUnloadDir_ = -1;
+            angToHangar = angToGoal - 20;
+        }
+        else
+        {
+            prevUnloadDir_ = 1;
+            angToHangar = angToGoal + 20;
+        }
+    }*/
+    frc::SmartDashboard::PutNumber("PHang", angToHangar);
 
     unloadAngle_ = 180 + angToHangar - yaw_;
     Helpers::normalizeAngle(unloadAngle_);
