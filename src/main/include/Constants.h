@@ -62,7 +62,7 @@ namespace InputConstants
     const int XBOX_RJOY_X = 4;
     const int XBOX_RJOY_Y = 5;
 
-    const int OUTAKE_BUTTON = 4;
+    const int OUTAKE_BUTTON = 3;
     
     const int AUTO_CLIMB_BUTTON = 1;
     const int AUTO_CLIMB_CANCEL = 2;
