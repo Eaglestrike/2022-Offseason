@@ -237,6 +237,7 @@ namespace ShooterConstants
     const double KICKER_SERIALIZING_VOLTS = 2;
     const double KICKER_SLOW_VOLTS = 2;
     const double KICKER_OUTAKE_VOLTS = -5;
+    const double REVERSE_KICKER_VOLTS = -1;
 
     const double UNLOADING_CURRENT = 15;
     const double UNLOADING_CURRENT_LOW = 5;

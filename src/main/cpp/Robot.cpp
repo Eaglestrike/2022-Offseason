@@ -234,7 +234,9 @@ void Robot::TeleopPeriodic()
             intake_.setState(Intake::LOADING);
             //intake_.setState(Intake::INTAKING);
         }
-        else if(controls_->shootPressed())
+        else if(!controls_->shootPressed() 
+        && (channel_->getBallCount() > 0 || shooter_->getState() == Shooter::SHOOTING) 
+        /*&& ((swerveDrive_->getY() < -4.875 && swerveDrive_->getY() < -1.2192) || (swerveDrive_->getY() > 4.875 && swerveDrive_->getY() > 1.2192))*/)
         {
             shooter_->setState(Shooter::SHOOTING);
             intake_.setState(Intake::LOADING);

@@ -32,7 +32,7 @@ class Channel
 
     private:
 
-        static constexpr auto i2cPort = frc::I2C::Port::kMXP; //kOnboard
+        static constexpr auto i2cPort = frc::I2C::Port::kOnboard; //kOnboard, kMXP
         rev::ColorSensorV3 colorSensor_{i2cPort};
 
         //static constexpr auto i2cPort2 = frc::I2C::Port::kOnboard; //kOnboard

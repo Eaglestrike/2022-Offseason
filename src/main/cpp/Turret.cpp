@@ -177,8 +177,8 @@ void Turret::calcUnloadAng()
 
     double angDiff = abs(angToHangar - angToGoal);
 
-    frc::SmartDashboard::PutNumber("HAng", angToHangar);
-    frc::SmartDashboard::PutNumber("GAng", angToGoal);
+    //frc::SmartDashboard::PutNumber("HAng", angToHangar);
+    //frc::SmartDashboard::PutNumber("GAng", angToGoal);
     if(angDiff < 3)
     {
         if(prevUnloadDir_ > 0)
@@ -233,7 +233,7 @@ void Turret::calcUnloadAng()
             angToHangar = angToGoal + 20;
         }
     }*/
-    frc::SmartDashboard::PutNumber("PHang", angToHangar);
+    //frc::SmartDashboard::PutNumber("PHang", angToHangar);
 
     unloadAngle_ = 180 + angToHangar - yaw_;
     Helpers::normalizeAngle(unloadAngle_);
