@@ -190,7 +190,7 @@ void Shooter::periodic(double yaw)
         distance += (rangeAdjustment_ + LimelightConstants::LIMELIGHT_TO_BALL_CENTER_DIST) + 0.61 + 0.2286/* - 0.1524*/; //TODO, change or something
         frc::SmartDashboard::PutNumber("Distance", distance);
 
-        if(distance < 2.5 || distance > 7.5)
+        if(distance < 2.5 || distance >= 7.3)
         {
             distance = 0;
             hasShot_ = false;
