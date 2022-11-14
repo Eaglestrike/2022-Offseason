@@ -30,7 +30,7 @@ Robot::Robot() : autoPaths_(channel_)
             {
                 shooter_->periodic(-yaw);
                 climb_.periodic(navx_->GetRoll());
-                frc::SmartDashboard::PutNumber("Roll", navx_->GetRoll());
+                //frc::SmartDashboard::PutNumber("Roll", navx_->GetRoll());
             }
 
         }, 5_ms, 2_ms);
@@ -49,6 +49,8 @@ void Robot::RobotInit()
     autoChooser_.AddOption("Two Left", AutoPaths::TWO_LEFT);
     autoChooser_.AddOption("Three", AutoPaths::THREE);
     autoChooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    autoChooser_.AddOption("DOMINIC", AutoPaths::DOMINIC);
+    autoChooser_.AddOption("EYE FOR AN EYE", AutoPaths::EYE_FOR_AN_EYE);
     frc::SmartDashboard::PutData("Auto Modes", &autoChooser_);
 
     frc::SmartDashboard::PutNumber("Auto Yaw Offset", 0);
@@ -139,7 +141,9 @@ void Robot::AutonomousPeriodic()
     Intake::State intakeState = autoPaths_.getIntakeState();
     Shooter::State shooterState = autoPaths_.getShooterState();
 
-    if(channel_->badIdea() || shooter_->getState() == Shooter::UNLOADING)
+    if(channel_->badIdea() && 
+    !(autoPaths_.getPath() == AutoPaths::DOMINIC && autoPaths_.pathNum() != 3) &&
+    !(autoPaths_.getPath() == AutoPaths::EYE_FOR_AN_EYE && autoPaths_.pathNum() != 4)/* || shooter_->getState() == Shooter::UNLOADING*/)
     {
         shooterState = Shooter::UNLOADING;
     }
@@ -149,8 +153,10 @@ void Robot::AutonomousPeriodic()
         intakeState = Intake::LOADING;
     }
 
-    intake_.setState(autoPaths_.getIntakeState());
-    shooter_->setState(autoPaths_.getShooterState());
+    //intake_.setState(autoPaths_.getIntakeState());
+    intake_.setState(intakeState);
+    //shooter_->setState(autoPaths_.getShooterState());
+    shooter_->setState(shooterState);
 
     intake_.periodic();
 }
@@ -180,7 +186,7 @@ void Robot::TeleopInit()
     //frc::SmartDashboard::PutNumber("tkP", 0.0);
     //frc::SmartDashboard::PutNumber("tkI", 0.0);
     //frc::SmartDashboard::PutNumber("tkD", 0.0);
-    frc::SmartDashboard::PutNumber("Sintake", 0.0);
+    //frc::SmartDashboard::PutNumber("Sintake", 0.0);
 
 }
 
@@ -228,7 +234,9 @@ void Robot::TeleopPeriodic()
             intake_.setState(Intake::LOADING);
             //intake_.setState(Intake::INTAKING);
         }
-        else if(controls_->shootPressed())
+        else if(!controls_->shootPressed() 
+        && (channel_->getBallCount() > 0 || shooter_->getState() == Shooter::SHOOTING) 
+        /*&& ((swerveDrive_->getY() < -4.875 && swerveDrive_->getY() < -1.2192) || (swerveDrive_->getY() > 4.875 && swerveDrive_->getY() > 1.2192))*/)
         {
             shooter_->setState(Shooter::SHOOTING);
             intake_.setState(Intake::LOADING);
@@ -246,7 +254,7 @@ void Robot::TeleopPeriodic()
 
         if (controls_->intakePressed())
         {
-            if(shooter_->getState() != Shooter::SHOOTING)
+            if(shooter_->getState() != Shooter::SHOOTING && shooter_->getState() != Shooter::UNLOADING)
             {
                 shooter_->setState(Shooter::REVING);
             }
@@ -270,6 +278,19 @@ void Robot::TeleopPeriodic()
         if(controls_->manuallyOverrideTurret())
         {
             shooter_->setState(Shooter::MANUAL);
+
+            if(controls_->launchpadShotDown())
+            {
+                shooter_->setManualShot(1);
+            }
+            else if(controls_->tarmacShotDown())
+            {
+                shooter_->setManualShot(2);
+            }
+            else
+            {
+                shooter_->setManualShot(0);
+            }
         }
 
     }
@@ -380,6 +401,8 @@ void Robot::DisabledPeriodic()
     swerveDrive_->reset();
 
     autoPaths_.setSetPath(false);
+
+    channel_->badIdea();
 }
 
 void Robot::TestInit() {}

@@ -123,7 +123,7 @@ bool Controls::decreaseRange()
 
 double Controls::getTurretManual()
 {
-    return xbox_.GetRawAxis(InputConstants::XBOX_RJOY_X) * 0.3 * GeneralConstants::MAX_VOLTAGE;
+    return xbox_.GetRawAxis(InputConstants::XBOX_LJOY_X) * 0.2 * GeneralConstants::MAX_VOLTAGE;
 }
 //0,7 0
 //0.8, 100
@@ -131,6 +131,16 @@ double Controls::getTurretManual()
 //2, 2280
 //3, 4200
 //4, 6100
+
+bool Controls::launchpadShotDown()
+{
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC1_BUTTON);
+}
+
+bool Controls::tarmacShotDown()
+{
+    return xbox_.GetRawButton(InputConstants::CLIMB_PNEUMATIC2_BUTTON);
+}
 
 bool Controls::resetUnload()
 {

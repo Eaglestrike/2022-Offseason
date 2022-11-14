@@ -56,11 +56,11 @@ void Intake::run(bool forward)
     if(forward)
     {
         //double speed = frc::SmartDashboard::GetNumber("Sintake", 0.0);
-        intakeMotor_.SetVoltage(units::volt_t(6));
+        intakeMotor_.SetVoltage(units::volt_t(IntakeConstants::INTAKE_SPEED));
     }
     else
     {
-        intakeMotor_.SetVoltage(units::volt_t(-4.68));
+        intakeMotor_.SetVoltage(units::volt_t(IntakeConstants::OUTAKE_SPEED));
     }
 }
 
