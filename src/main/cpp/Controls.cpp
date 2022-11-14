@@ -123,7 +123,7 @@ bool Controls::decreaseRange()
 
 double Controls::getTurretManual()
 {
-    return xbox_.GetRawAxis(InputConstants::XBOX_LJOY_X) * 0.3 * GeneralConstants::MAX_VOLTAGE;
+    return xbox_.GetRawAxis(InputConstants::XBOX_LJOY_X) * 0.2 * GeneralConstants::MAX_VOLTAGE;
 }
 //0,7 0
 //0.8, 100

@@ -426,7 +426,14 @@ void Shooter::periodic(double yaw)
             if(shotReady_)
             {
                 shootStarted_ = true;
-                kickerMotor_.SetVoltage(units::volt_t(ShooterConstants::KICKER_SLOW_VOLTS)); //TODO tune value
+                if(frc::DriverStation::IsAutonomous())
+                {
+                    kickerMotor_.SetVoltage(units::volt_t(5));
+                }
+                else
+                {
+                    kickerMotor_.SetVoltage(units::volt_t(ShooterConstants::KICKER_SLOW_VOLTS)); //TODO tune value
+                }
             }
             else if(channel_->getBallCount() < 1)
             {

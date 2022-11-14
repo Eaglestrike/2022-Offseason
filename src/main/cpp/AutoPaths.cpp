@@ -201,13 +201,13 @@ void AutoPaths::setPath(Path path)
         SwervePath p3(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
 
         p3.addPoint(SwervePose(-1.726-0.45, -0.2202+0.21-0.3, -64.45, 0));
-        p3.addPoint(SwervePose(1.556004+0.3, -1.441704+0.7, 110, 2.5));
+        p3.addPoint(SwervePose(1.556004+0.3, -1.441704+0.7-0.3, 110, 2.5));
 
         p3.generateTrajectory(false);
 
         SwervePath p4(SwerveConstants::MAX_LA, SwerveConstants::MAX_LV, SwerveConstants::MAX_AA, SwerveConstants::MAX_AV);
 
-        p4.addPoint(SwervePose(1.556004+0.3, -1.441704+0.7, 110, 0));
+        p4.addPoint(SwervePose(1.556004+0.3, -1.441704+0.7-0.3, 110, 0));
         p4.addPoint(SwervePose(0, 0, 20, 1.5));
 
         p4.generateTrajectory(false);
@@ -485,7 +485,7 @@ void AutoPaths::periodic(double yaw, SwerveDrive *swerveDrive)
                     failsafeTimer_.Start();
                 }
 
-                if (failsafeTimer_.Get().value() > 2/* || channel_->getBallsShot() > 1*/)
+                if (failsafeTimer_.Get().value() > 2.1/* || channel_->getBallsShot() > 1*/)
                 {
                     failsafeTimer_.Stop();
                     failsafeTimer_.Reset();

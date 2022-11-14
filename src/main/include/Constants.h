@@ -234,7 +234,7 @@ namespace ShooterConstants
     const int TURRET_AIMED = 3;
     const int TURRET_UNLOAD_AIMED = 3;
 
-    const double KICKER_SERIALIZING_VOLTS = 2;
+    const double KICKER_SERIALIZING_VOLTS = 3;
     const double KICKER_SLOW_VOLTS = 2;
     const double KICKER_OUTAKE_VOLTS = -5;
     const double REVERSE_KICKER_VOLTS = -1;
